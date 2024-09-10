@@ -18,7 +18,7 @@ public class App {
         // Pick a random card
         Random randGen = new Random();
         int cardIndex = randGen.nextInt(52);
-        playerHand[0] = deck[cardIndex];
+        playerHand[0] = "Hjärter Ess"; //deck[cardIndex];
 
         // Pick a random card
         cardIndex = randGen.nextInt(52);
@@ -34,20 +34,38 @@ public class App {
     //Calculates the value of a stack of card
     public static int calculateValues(String[] stack, String[] deck) {
         int sum= 0;
+        boolean aceOnHand = false;
+        
         //loop through the stack 
         for (int i = 0; i < stack.length; i++) {
             String currentCard = stack[i];
-            System.out.println("current card is " + currentCard);
             // only loop through the deck if the card is not null
             if (currentCard != null) {
+                System.out.println("current card is " + currentCard);
                 int index= findIndex(currentCard,deck);
                 int value = index % 13 + 1; // +1 because H5 index 4 gives value 4
+
+                // if j,q,k (values, 11,12,13) set value to 10
                 if (value > 10){
                     value = 10;
+                }else if(value == 1){ //find if we have an ace on hand
+                    value = 0;
+                    aceOnHand = true;
                 }
+
                 sum= sum+value;
             }
         }
+
+        //fixes the ace
+        if (aceOnHand){ // sam as (aceOnHand == true)
+            if (sum <= 10){
+                sum += 11;  // sum = sum + 11
+            }else{
+                sum ++;
+            }
+        }
+
         return sum;
     }
 
